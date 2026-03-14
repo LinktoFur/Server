@@ -1,0 +1,10 @@
+package cn.langya.user;
+
+/**
+ * @author LangYa466
+ * @date 2026/2/27
+ */
+public enum UserLevel {
+    NORMAL,
+    ADMIN
+}
