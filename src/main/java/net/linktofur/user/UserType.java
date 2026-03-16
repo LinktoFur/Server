@@ -4,7 +4,7 @@ package net.linktofur.user;
  * @author LangYa466
  * @date 2026/2/27
  */
-public enum UserLevel {
+public enum UserType {
     NORMAL,
     STAFF,
     ADMIN

@@ -16,7 +16,7 @@ public class User {
     public String name;
     public String email;
     public String password;
-    public UserLevel level;
+    public UserType level;
 
     @Builder.Default
     public boolean verified = false;
@@ -37,6 +37,6 @@ public class User {
     }
 
     public boolean isAdmin() {
-        return level == UserLevel.ADMIN;
+        return level == UserType.ADMIN;
     }
 }

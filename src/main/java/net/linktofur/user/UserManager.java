@@ -18,7 +18,7 @@ public class UserManager {
 
     public void addUser(User user) {
         if (users.isEmpty()) {
-            user.level = UserLevel.ADMIN;
+            user.level = UserType.ADMIN;
         }
         users.put(user.id, user);
     }

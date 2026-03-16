@@ -2,12 +2,11 @@ package net.linktofur.api.impl.user;
 
 import io.javalin.http.Context;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.mindrot.jbcrypt.BCrypt;
 import net.linktofur.api.API;
 import net.linktofur.api.Response;
 import net.linktofur.user.User;
-import net.linktofur.user.UserLevel;
+import net.linktofur.user.UserType;
 import net.linktofur.user.UserManager;
 
 import java.util.Map;
@@ -64,7 +63,7 @@ public class RegisterAPI extends API {
                 .name(name)
                 .email(email)
                 .password(hashedPassword)
-                .level(UserLevel.NORMAL)
+                .level(UserType.NORMAL)
                 .build();
 
         UserManager.INSTANCE.addUser(user);
