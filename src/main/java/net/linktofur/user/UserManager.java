@@ -31,7 +31,7 @@ public class UserManager {
         return users.get(userId);
     }
 
-    public void deleteUser(User user) {
+    public void removeUser(User user) {
         users.remove(user.id);
     }
 }

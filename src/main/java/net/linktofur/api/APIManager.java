@@ -1,6 +1,8 @@
 package net.linktofur.api;
 
 import net.linktofur.api.impl.TestAPI;
+import net.linktofur.api.impl.group.AddGroupAPI;
+import net.linktofur.api.impl.group.DeleteGroupAPI;
 import net.linktofur.api.impl.user.LogOutAPI;
 import net.linktofur.api.impl.user.LoginAPI;
 import net.linktofur.api.impl.user.RegisterAPI;
@@ -21,10 +23,16 @@ public class APIManager {
     public APIManager() {
         apis = new API[]{
                 new TestAPI(),
+
+                // user
                 new LoginAPI(),
                 new RegisterAPI(),
                 new LogOutAPI(),
-                new VerifyAPI()
+                new VerifyAPI(),
+
+                // group
+                new AddGroupAPI(),
+                new DeleteGroupAPI()
         };
         for (API api : apis) {
             log.info("API {} has been initialized", api);

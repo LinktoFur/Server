@@ -54,7 +54,7 @@ public class RegisterAPI extends API {
         if (!userByEmail.verified) {
             // TODO 发旧账户全部信息邮件给他
             var message = userByEmail.toString();
-            UserManager.INSTANCE.deleteUser(userByEmail);
+            UserManager.INSTANCE.removeUser(userByEmail);
         }
 
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
