@@ -52,6 +52,8 @@ public class BanUserAPI extends API {
             return Response.error(404, Map.of("message", "用户不存在"));
         }
 
+        targetUser.banned = true;
+
         return Response.success(Map.of("message", "封禁成功"));
     }
 }

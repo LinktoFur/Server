@@ -60,6 +60,11 @@ public abstract class API {
             return null;
         }
 
+        if (user.banned) {
+            ctx.status(403).result("你被封了");
+            return null;
+        }
+
         return user;
     }
 }

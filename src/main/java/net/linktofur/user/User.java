@@ -19,6 +19,8 @@ public class User {
     public UserType level;
 
     @Builder.Default
+    public boolean banned = false;
+    @Builder.Default
     public boolean verified = false;
     @Builder.Default
     private String verifyCode = null;

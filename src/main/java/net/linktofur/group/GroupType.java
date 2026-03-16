@@ -12,6 +12,7 @@ public enum GroupType {
         try {
             return GroupType.valueOf(value.toUpperCase());
         } catch (IllegalArgumentException e) {
+            e.fillInStackTrace();
             return null;
         }
     }
