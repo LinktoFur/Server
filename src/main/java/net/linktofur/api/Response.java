@@ -1,4 +1,4 @@
-package cn.langya.api;
+package net.linktofur.api;
 
 import lombok.Builder;
 

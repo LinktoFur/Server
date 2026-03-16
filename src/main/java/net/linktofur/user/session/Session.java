@@ -1,4 +1,4 @@
-package cn.langya.user.session;
+package net.linktofur.user.session;
 
 import lombok.AllArgsConstructor;
 

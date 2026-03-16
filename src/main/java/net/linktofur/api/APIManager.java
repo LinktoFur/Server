@@ -1,13 +1,13 @@
-package cn.langya.api;
+package net.linktofur.api;
 
-import cn.langya.api.impl.TestAPI;
-import cn.langya.api.impl.user.LogOutAPI;
-import cn.langya.api.impl.user.LoginAPI;
-import cn.langya.api.impl.user.RegisterAPI;
-import cn.langya.api.impl.user.VerifyAPI;
+import net.linktofur.api.impl.TestAPI;
+import net.linktofur.api.impl.user.LogOutAPI;
+import net.linktofur.api.impl.user.LoginAPI;
+import net.linktofur.api.impl.user.RegisterAPI;
+import net.linktofur.api.impl.user.VerifyAPI;
 import lombok.extern.slf4j.Slf4j;
-import cn.langya.api.impl.*;
-import cn.langya.api.impl.user.*;
+import net.linktofur.api.impl.*;
+import net.linktofur.api.impl.user.*;
 
 /**
  * @author LangYa466

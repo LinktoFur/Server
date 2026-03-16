@@ -1,8 +1,8 @@
-package cn.langya.api.impl;
+package net.linktofur.api.impl;
 
 import io.javalin.http.Context;
-import cn.langya.api.API;
-import cn.langya.api.Response;
+import net.linktofur.api.API;
+import net.linktofur.api.Response;
 
 import java.util.Map;
 

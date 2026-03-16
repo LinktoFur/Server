@@ -1,6 +1,7 @@
-package cn.langya.user;
+package net.linktofur.user;
 
 import lombok.Builder;
+import lombok.ToString;
 
 import java.util.UUID;
 
@@ -9,6 +10,7 @@ import java.util.UUID;
  * @date 2026/2/27
  */
 @Builder
+@ToString
 public class User {
     public UUID id;
     public String name;
@@ -21,9 +23,11 @@ public class User {
     @Builder.Default
     private String verifyCode = null;
     @Builder.Default
-    public long lastLogin = 0;
+    public long loginAt = 0;
     @Builder.Default
-    public long lastLogout = 0;
+    public long logoutAt = 0;
+    @Builder.Default
+    public long createdAt = System.currentTimeMillis();
 
     public String getVerifyCode() {
         if (verifyCode == null) {

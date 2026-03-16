@@ -1,10 +1,10 @@
-package cn.langya;
+package net.linktofur;
 
 import io.javalin.Javalin;
 import lombok.extern.slf4j.Slf4j;
-import cn.langya.api.API;
-import cn.langya.api.APIManager;
-import cn.langya.api.Response;
+import net.linktofur.api.API;
+import net.linktofur.api.APIManager;
+import net.linktofur.api.Response;
 
 import java.util.Map;
 

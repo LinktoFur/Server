@@ -1,4 +1,4 @@
-import cn.langya.util.NotifyUtil;
+import net.linktofur.util.NotifyUtil;
 
 /**
  * @author LangYa466

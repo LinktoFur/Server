@@ -1,10 +1,10 @@
-package cn.langya.api;
+package net.linktofur.api;
 
 import io.javalin.http.Context;
 import lombok.AllArgsConstructor;
-import cn.langya.user.User;
-import cn.langya.user.UserManager;
-import cn.langya.user.session.SessionManager;
+import net.linktofur.user.User;
+import net.linktofur.user.UserManager;
+import net.linktofur.user.session.SessionManager;
 
 import java.util.UUID;
 
@@ -54,6 +54,12 @@ public abstract class API {
             return null;
         }
 
-        return UserManager.INSTANCE.getUserById(userId);
+        var user = UserManager.INSTANCE.getUserById(userId);
+        if (!user.verified) {
+            ctx.status(403).result("未验证");
+            return null;
+        }
+
+        return user;
     }
 }

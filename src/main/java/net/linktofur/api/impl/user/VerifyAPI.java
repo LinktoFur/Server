@@ -1,9 +1,9 @@
-package cn.langya.api.impl.user;
+package net.linktofur.api.impl.user;
 
 import io.javalin.http.Context;
-import cn.langya.api.API;
-import cn.langya.api.Response;
-import cn.langya.util.NotifyUtil;
+import net.linktofur.api.API;
+import net.linktofur.api.Response;
+import net.linktofur.util.NotifyUtil;
 
 import java.util.Map;
 
@@ -19,7 +19,7 @@ public class VerifyAPI extends API {
     @Override
     public Response run(Context ctx) throws Exception {
         var user = getUser(ctx);
-        if (user == null) {
+        if (isNull(user)) {
             return Response.error(401, Map.of("message", "未登入"));
         }
         if (user.verified) {
@@ -31,6 +31,7 @@ public class VerifyAPI extends API {
             NotifyUtil.send("Linktofur.net - 验证通知", "您的验证码为: " + user.getVerifyCode(), user.email);
             return Response.success(Map.of("message", "验证码已发送到邮箱"));
         }
+
         if (verifyCode.equals(user.getVerifyCode())) {
             user.verified = true;
             return Response.success(Map.of("message", "验证成功"));

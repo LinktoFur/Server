@@ -1,15 +1,15 @@
-package cn.langya.api.impl.user;
+package net.linktofur.api.impl.user;
 
 import io.javalin.http.Context;
 import io.javalin.http.Cookie;
 import io.javalin.http.SameSite;
 import lombok.extern.slf4j.Slf4j;
-import cn.langya.api.API;
-import cn.langya.api.Response;
-import cn.langya.user.User;
+import net.linktofur.api.API;
+import net.linktofur.api.Response;
+import net.linktofur.user.User;
 import org.mindrot.jbcrypt.BCrypt;
-import cn.langya.user.UserManager;
-import cn.langya.user.session.SessionManager;
+import net.linktofur.user.UserManager;
+import net.linktofur.user.session.SessionManager;
 
 import java.util.Map;
 import java.util.UUID;
@@ -53,7 +53,7 @@ public class LoginAPI extends API {
 
         ctx.cookie(cookie);
 
-        user.lastLogin = System.currentTimeMillis();
+        user.loginAt = System.currentTimeMillis();
 
         return Response.success(Map.of(
                 "message", "登录成功",

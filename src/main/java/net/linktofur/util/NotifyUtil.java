@@ -1,6 +1,6 @@
-package cn.langya.util;
+package net.linktofur.util;
 
-import cn.langya.user.User;
+import net.linktofur.user.User;
 
 /**
  * @author LangYa466

@@ -1,4 +1,4 @@
-package cn.langya.user;
+package net.linktofur.user;
 
 /**
  * @author LangYa466
@@ -6,5 +6,6 @@ package cn.langya.user;
  */
 public enum UserLevel {
     NORMAL,
+    STAFF,
     ADMIN
 }

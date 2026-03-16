@@ -1,4 +1,4 @@
-package cn.langya.user;
+package net.linktofur.user;
 
 import java.util.Map;
 import java.util.UUID;
@@ -29,5 +29,9 @@ public class UserManager {
 
     public User getUserById(UUID userId) {
         return users.get(userId);
+    }
+
+    public void deleteUser(User user) {
+        users.remove(user.id);
     }
 }
