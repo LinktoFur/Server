@@ -1,5 +1,6 @@
 package net.linktofur.group;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,13 +25,13 @@ public class GroupManager {
         return groups.get(id);
     }
 
-    public java.util.List<Group> getGroupsByType(GroupType type) {
+    public List<Group> getGroupsByType(GroupType type) {
         return groups.values().stream()
                 .filter(group -> group.type == type)
                 .toList();
     }
 
-    public java.util.List<Group> getGroupsByRegion(String region) {
+    public List<Group> getGroupsByRegion(String region) {
         return groups.values().stream()
                 .filter(group -> group.region.equals(region))
                 .toList();
