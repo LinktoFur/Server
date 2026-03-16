@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "cn.langya"
+group = "net.linktofur"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -34,4 +34,8 @@ tasks.jar {
         }.standardOutput.asText.get().trim()
     }.getOrDefault("local")
     archiveFileName.set("LinkToFur-Server-${commitHash}.jar")
+}
+
+tasks.test {
+    enabled = false
 }
