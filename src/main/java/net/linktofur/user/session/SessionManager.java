@@ -21,15 +21,15 @@ public class SessionManager {
     }
 
     public UUID createSession(UUID userId) {
-        UUID sessionId = UUID.randomUUID();
-        long expireAt = System.currentTimeMillis() + SESSION_DURATION;
+        var sessionId = UUID.randomUUID();
+        var expireAt = System.currentTimeMillis() + SESSION_DURATION;
 
         sessions.put(sessionId, new Session(userId, expireAt));
         return sessionId;
     }
 
     public UUID getUserId(UUID sessionId) {
-        Session data = sessions.get(sessionId);
+        var data = sessions.get(sessionId);
 
         if (data == null) return null;
 

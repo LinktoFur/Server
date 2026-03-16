@@ -1,15 +1,9 @@
 package net.linktofur.api;
 
-import net.linktofur.api.impl.TestAPI;
-import net.linktofur.api.impl.group.AddGroupAPI;
-import net.linktofur.api.impl.group.DeleteGroupAPI;
-import net.linktofur.api.impl.user.LogOutAPI;
-import net.linktofur.api.impl.user.LoginAPI;
-import net.linktofur.api.impl.user.RegisterAPI;
-import net.linktofur.api.impl.user.VerifyAPI;
 import lombok.extern.slf4j.Slf4j;
-import net.linktofur.api.impl.*;
-import net.linktofur.api.impl.user.*;
+import net.linktofur.util.ClassUtil;
+
+import java.util.Objects;
 
 /**
  * @author LangYa466
@@ -21,21 +15,18 @@ public class APIManager {
     public API[] apis;
 
     public APIManager() {
-        apis = new API[]{
-                new TestAPI(),
+        var classes = ClassUtil.findSubClasses("net.linktofur.api.impl", API.class);
 
-                // user
-                new LoginAPI(),
-                new RegisterAPI(),
-                new LogOutAPI(),
-                new VerifyAPI(),
-
-                // group
-                new AddGroupAPI(),
-                new DeleteGroupAPI()
-        };
-        for (API api : apis) {
-            log.info("API {} has been initialized", api);
-        }
+        apis = classes.stream()
+                .map(clazz -> {
+                    try {
+                        return clazz.getDeclaredConstructor().newInstance();
+                    } catch (Exception e) {
+                        log.error("Failed to instantiate API: {}", clazz.getName(), e);
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .toArray(API[]::new);
     }
 }

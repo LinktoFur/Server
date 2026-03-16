@@ -13,7 +13,7 @@ import java.util.Map;
  * @author LangYa466
  * @date 2026/3/16
  */
-@SuppressWarnings("DataFlowIssue")
+@SuppressWarnings({"DataFlowIssue", "unused"})
 public class AddGroupAPI extends API {
     public AddGroupAPI() {
         super("group/add");

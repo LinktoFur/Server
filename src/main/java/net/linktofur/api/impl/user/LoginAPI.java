@@ -18,6 +18,7 @@ import java.util.UUID;
  * @author LangYa466
  * @date 2026/2/28
  */
+@SuppressWarnings("unused")
 @Slf4j
 public class LoginAPI extends API {
     public LoginAPI() {

@@ -11,6 +11,7 @@ import java.util.Map;
  * @author LangYa466
  * @date 2026/2/28
  */
+@SuppressWarnings("unused")
 public class VerifyAPI extends API {
     public VerifyAPI() {
         super("user/verify");

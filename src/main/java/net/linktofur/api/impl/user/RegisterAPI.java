@@ -16,7 +16,7 @@ import java.util.UUID;
  * @author LangYa466
  * @date 2026/2/27
  */
-@SuppressWarnings("DataFlowIssue")
+@SuppressWarnings({"DataFlowIssue", "unused"})
 @Slf4j
 public class RegisterAPI extends API {
     public RegisterAPI() {
