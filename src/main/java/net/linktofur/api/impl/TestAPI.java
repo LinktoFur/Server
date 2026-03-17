@@ -10,6 +10,7 @@ import java.util.Map;
  * @author LangYa466
  * @date 2026/2/27
  */
+@SuppressWarnings("unused")
 public class TestAPI extends API {
     public TestAPI() {
         super("/");
