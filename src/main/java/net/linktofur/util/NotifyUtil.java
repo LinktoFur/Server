@@ -45,4 +45,8 @@ public class NotifyUtil {
     public static void send(String title, String text, User user) throws Exception {
         send(title, text, user.email, true);
     }
+
+    public static void send(String title, String text, String email) throws Exception {
+        send(title, text, email, false);
+    }
 }
