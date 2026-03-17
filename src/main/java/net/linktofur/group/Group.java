@@ -8,7 +8,8 @@ import lombok.Builder;
  */
 @Builder
 public class Group {
-    public String name;
+    public String groupName;
+    public String orgName;
     public GroupType type;
     public String groupId;
     public String region;

@@ -32,7 +32,8 @@ public class AddGroupAPI extends API {
         }
 
         String groupId = ctx.formParam("groupId");
-        String name = ctx.formParam("name");
+        String groupName = ctx.formParam("groupName"); // 考虑到组织联合群 所以改成groupName而非schoolName
+        String orgName = ctx.formParam("orgName");
         String region = ctx.formParam("region"); // 提交格式 广东 新疆 四川 哈尔滨 不用带后缀 如果是海外 就填国家就行 比如 美国 英国 日本 爱沙尼亚
         String type = ctx.formParam("type"); // REGION OR SCHOOL
 
@@ -45,7 +46,7 @@ public class AddGroupAPI extends API {
             return Response.error(400, Map.of("message", "无效的群类型"));
         }
 
-        var group = Group.builder().groupId(groupId).name(name).region(region).type(groupType).build();
+        var group = Group.builder().groupId(groupId).groupName(groupName).orgName(orgName).region(region).type(groupType).build();
         GroupManager.INSTANCE.addGroup(group);
 
         return Response.success(Map.of("message", "添加成功"));
