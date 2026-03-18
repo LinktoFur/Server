@@ -26,8 +26,9 @@ public class ViewGroupAPI extends API {
         }
 
         var id = ctx.formParam("id");
+        var content = ctx.formParam("content");
 
-        if (isNull(id)) {
+        if (isNull(id, content)) {
             return Response.error(400, Map.of("message", "参数有问题"));
         }
 

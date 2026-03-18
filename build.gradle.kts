@@ -1,5 +1,10 @@
 plugins {
     id("java")
+    application
+}
+
+application {
+    mainClass.set("net.linktofur.Main")
 }
 
 group = "net.linktofur"
