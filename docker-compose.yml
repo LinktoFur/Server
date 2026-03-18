@@ -2,12 +2,14 @@ version: '3.8'
 
 services:
   linktofur-server:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: eclipse-temurin:21-jre-alpine
+    container_name: linktofur-server
     ports:
       - "127.0.0.1:2778:2778"
     volumes:
       - ./config.toml:/app/config.toml
       - ./logs:/app/logs
+      - ./main.jar:/app/main.jar
+    working_dir: /app
+    command: ["java", "-jar", "main.jar"]
     restart: unless-stopped
