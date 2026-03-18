@@ -9,6 +9,7 @@ import java.util.UUID;
  * @author LangYa466
  * @date 2026/2/27
  */
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 @Builder
 @ToString
 public class User {

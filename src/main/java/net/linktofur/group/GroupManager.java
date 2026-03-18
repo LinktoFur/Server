@@ -11,17 +11,18 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GroupManager {
     public static final GroupManager INSTANCE = new GroupManager();
-    public Map<String, Group> groups;
+    public Map<Integer, Group> groups;
 
     public GroupManager() {
         groups = new ConcurrentHashMap<>();
     }
 
     public void addGroup(Group group) {
-        groups.put(group.groupId, group);
+        group.id = groups.size() + 1;
+        groups.put(group.id, group);
     }
 
-    public Group getGroupById(String id) {
+    public Group getGroupById(Integer id) {
         return groups.get(id);
     }
 
@@ -37,7 +38,7 @@ public class GroupManager {
                 .toList();
     }
 
-    public void removeGroup(String id) {
+    public void removeGroup(Integer id) {
         groups.remove(id);
     }
 }

@@ -46,7 +46,7 @@ public class AddGroupAPI extends API {
             return Response.error(400, Map.of("message", "无效的群类型"));
         }
 
-        var group = Group.builder().groupId(groupId).groupName(groupName).orgName(orgName).region(region).type(groupType).build();
+        var group = Group.builder().groupId(groupId).groupName(groupName).user(user).region(region).type(groupType).build();
         GroupManager.INSTANCE.addGroup(group);
 
         return Response.success(Map.of("message", "添加成功"));
