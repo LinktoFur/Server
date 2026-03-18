@@ -33,7 +33,25 @@ tasks.jar {
             commandLine("git", "rev-parse", "--short", "HEAD")
         }.standardOutput.asText.get().trim()
     }.getOrDefault("local")
-    archiveFileName.set("LinkToFur-Server-${commitHash}.jar")
+    
+    if (System.getenv("GITHUB_ACTIONS") == "true") {
+        archiveFileName.set("LinkToFur-Server-${commitHash}-fat.jar")
+    } else {
+        archiveFileName.set("main.jar")
+    }
+
+    manifest {
+        attributes("Main-Class" to "net.linktofur.Main")
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(sourceSets.main.get().output)
+    dependsOn(configurations.runtimeClasspath)
+    
+    // Package all dependencies into the jar
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
 }
 
 tasks.test {
