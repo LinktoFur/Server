@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class SessionManager {
     public static final SessionManager INSTANCE = new SessionManager();
-    private static final Duration SESSION_DURATION = Duration.ofDays(7);
+    private static final Duration SESSION_DURATION = Duration.ofDays(30);
     private final Map<UUID, Session> sessions;
 
     private SessionManager() {

@@ -2,12 +2,13 @@ package net.linktofur.api.impl.user;
 
 import io.javalin.http.Context;
 import lombok.extern.slf4j.Slf4j;
-import org.mindrot.jbcrypt.BCrypt;
+
 import net.linktofur.api.API;
 import net.linktofur.api.Response;
 import net.linktofur.user.User;
 import net.linktofur.user.UserType;
 import net.linktofur.user.UserManager;
+import net.linktofur.util.NotifyUtil;
 
 import java.util.Map;
 import java.util.UUID;
@@ -16,7 +17,7 @@ import java.util.UUID;
  * @author LangYa466
  * @date 2026/2/27
  */
-@SuppressWarnings({"DataFlowIssue", "unused"})
+@SuppressWarnings({ "DataFlowIssue", "unused" })
 @Slf4j
 public class RegisterAPI extends API {
     public RegisterAPI() {
@@ -24,12 +25,11 @@ public class RegisterAPI extends API {
     }
 
     @Override
-    public Response run(Context ctx) {
+    public Response run(Context ctx) throws Exception {
         String name = ctx.formParam("name");
         String email = ctx.formParam("email");
-        String password = ctx.formParam("password");
 
-        if (isNull(email, name, password)) {
+        if (isNull(email, name)) {
             return Response.error(400, Map.of("message", "参数有问题"));
         }
         var userByEmail = UserManager.INSTANCE.getUserByEmail(email);
@@ -42,27 +42,20 @@ public class RegisterAPI extends API {
             return Response.error(400, Map.of("message", "用户名长度必须至少为3"));
         }
 
-        if (password.length() < 6) {
-            return Response.error(400, Map.of("message", "密码长度必须至少为6"));
-        }
-
         if (!email.matches("^[0-9]+@qq\\.com$")) {
             return Response.error(400, Map.of("message", "仅支持QQ邮箱"));
         }
 
         if (!userByEmail.verified) {
-            // TODO 发旧账户全部信息邮件给他
-            var message = userByEmail.toString();
+            NotifyUtil.send("Linktofur.net - 注册通知",
+                    "您尝试重新注册一个已存在但未验证的账户 以下是系统记录的旧信息:\n" + userByEmail, userByEmail);
             UserManager.INSTANCE.removeUser(userByEmail);
         }
-
-        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
         User user = User.builder()
                 .id(UUID.randomUUID())
                 .name(name)
                 .email(email)
-                .password(hashedPassword)
                 .level(UserType.NORMAL)
                 .build();
 

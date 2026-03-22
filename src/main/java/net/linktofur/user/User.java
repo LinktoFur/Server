@@ -16,7 +16,6 @@ public class User {
     public UUID id;
     public String name;
     public String email;
-    public String password;
     public UserType level;
 
     @Builder.Default
@@ -24,7 +23,7 @@ public class User {
     @Builder.Default
     public boolean verified = false;
     @Builder.Default
-    private String verifyCode = null;
+    public String verifyCode = null;
     @Builder.Default
     public long loginAt = 0;
     @Builder.Default

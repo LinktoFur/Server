@@ -18,6 +18,7 @@ import java.util.Map;
 @Slf4j
 public class Main {
     public static Javalin app;
+    public static final String url = "https://www.linktofur.net/";
     private static final File config = new File("config.toml");
     public static final Map<String, String> configs = new HashMap<>();
 
