@@ -16,12 +16,13 @@ import java.util.Map;
  * @date 2026/2/27
  */
 public class NotifyUtil {
-    private static final HttpClient CLIENT = HttpClient.newHttpClient();
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    public static final NotifyUtil INSTANCE = new NotifyUtil();
+    private final HttpClient client = HttpClient.newHttpClient();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     // 直接拆成微服务了 比较方便
-    public static void send(String title, String text, String email, boolean isHtml) throws Exception {
-        String payload = MAPPER.writeValueAsString(Map.of(
+    public void send(String title, String text, String email, boolean isHtml) throws Exception {
+        String payload = mapper.writeValueAsString(Map.of(
                 "token", Main.configs.get("notifyToken"),
                 "to", email,
                 "subject", title,
@@ -35,18 +36,18 @@ public class NotifyUtil {
                 .POST(HttpRequest.BodyPublishers.ofString(payload, StandardCharsets.UTF_8))
                 .build();
 
-        HttpResponse<String> response = CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
             throw new RuntimeException("邮件发送失败，状态码: " + response.statusCode() + "，响应: " + response.body());
         }
     }
 
-    public static void send(String title, String text, User user) throws Exception {
+    public void send(String title, String text, User user) throws Exception {
         send(title, text, user.email, true);
     }
 
-    public static void send(String title, String text, String email) throws Exception {
+    public void send(String title, String text, String email) throws Exception {
         send(title, text, email, false);
     }
 }

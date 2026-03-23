@@ -41,7 +41,7 @@ public class LoginAPI extends API {
         }
 
         if (code == null) {
-            NotifyUtil.send("Linktofur.net - 登录验证", "您的登录验证码为: " + user.getVerifyCode(), user);
+            NotifyUtil.INSTANCE.send("Linktofur.net - 登录验证", "您的登录验证码为: " + user.getVerifyCode(), user);
             return Response.success(Map.of("message", "验证码已发送到邮箱"));
         }
 

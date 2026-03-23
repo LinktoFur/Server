@@ -29,7 +29,7 @@ public class VerifyAPI extends API {
 
         String verifyCode = ctx.formParam("verifyCode");
         if (verifyCode == null) {
-            NotifyUtil.send("Linktofur.net - 验证通知", "您的验证码为: " + user.getVerifyCode(), user);
+            NotifyUtil.INSTANCE.send("Linktofur.net - 验证通知", "您的验证码为: " + user.getVerifyCode(), user);
             return Response.success(Map.of("message", "验证码已发送到邮箱"));
         }
 

@@ -47,7 +47,7 @@ public class RegisterAPI extends API {
         }
 
         if (!userByEmail.verified) {
-            NotifyUtil.send("Linktofur.net - 注册通知",
+            NotifyUtil.INSTANCE.send("Linktofur.net - 注册通知",
                     "您尝试重新注册一个已存在但未验证的账户 以下是系统记录的旧信息:\n" + userByEmail, userByEmail);
             UserManager.INSTANCE.removeUser(userByEmail);
         }

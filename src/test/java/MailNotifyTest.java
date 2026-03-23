@@ -7,7 +7,7 @@ import net.linktofur.util.NotifyUtil;
 public class MailNotifyTest {
     public static void main(String[] args) throws Exception {
         try {
-            NotifyUtil.send("LinkToFur test","my test message", "3054086606@qq.com");
+            NotifyUtil.INSTANCE.send("LinkToFur test","my test message", "3054086606@qq.com");
         } catch (Exception e){
             e.printStackTrace();
         }

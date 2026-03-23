@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class SessionManager {
     public static final SessionManager INSTANCE = new SessionManager();
-    private static final Duration SESSION_DURATION = Duration.ofDays(30);
+    private static final Duration duration = Duration.ofDays(30);
     private final Map<UUID, Session> sessions;
 
     private SessionManager() {
@@ -24,7 +24,7 @@ public class SessionManager {
 
     public UUID createSession(UUID userId) {
         var sessionId = UUID.randomUUID();
-        sessions.put(sessionId, new Session(userId, Instant.now().plus(SESSION_DURATION)));
+        sessions.put(sessionId, new Session(userId, Instant.now().plus(duration)));
         return sessionId;
     }
 

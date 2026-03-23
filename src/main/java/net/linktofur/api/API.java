@@ -6,6 +6,7 @@ import net.linktofur.user.User;
 import net.linktofur.user.UserManager;
 import net.linktofur.user.session.SessionManager;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -27,6 +28,9 @@ public abstract class API {
             }
             if (object == null) {
                 return true;
+            }
+            if (object instanceof List<?> list) {
+                return list.isEmpty();
             }
         }
         return false;
