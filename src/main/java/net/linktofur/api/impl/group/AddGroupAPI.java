@@ -31,17 +31,17 @@ public class AddGroupAPI extends API {
             return Response.error(403, Map.of("message", "权限不足"));
         }
 
-        String groupId = ctx.formParam("groupId");
-        String groupName = ctx.formParam("groupName"); // 考虑到组织联合群 所以改成groupName而非schoolName
-        String orgName = ctx.formParam("orgName");
-        String region = ctx.formParam("region"); // 提交格式 广东 新疆 四川 哈尔滨 不用带后缀 如果是海外 就填国家就行 比如 美国 英国 日本 爱沙尼亚
-        String type = ctx.formParam("type"); // REGION OR SCHOOL
+        var groupId = ctx.formParam("groupId");
+        var groupName = ctx.formParam("groupName"); // 考虑到组织联合群 所以改成groupName而非schoolName
+        var orgName = ctx.formParam("orgName");
+        var region = ctx.formParam("region"); // 提交格式 广东 新疆 四川 哈尔滨 不用带后缀 如果是海外 就填国家就行 比如 美国 英国 日本 爱沙尼亚
+        var type = ctx.formParam("type"); // REGION OR SCHOOL
 
         if (isNull(groupId, name, region, type)) {
             return Response.error(400, Map.of("message", "参数有问题"));
         }
 
-        GroupType groupType = GroupType.parse(type);
+        var groupType = GroupType.parse(type);
         if (groupType == null) {
             return Response.error(400, Map.of("message", "无效的群类型"));
         }
