@@ -36,8 +36,9 @@ public class AddGroupAPI extends API {
         var orgName = ctx.formParam("orgName");
         var region = ctx.formParam("region"); // 提交格式 广东 新疆 四川 哈尔滨 不用带后缀 如果是海外 就填国家就行 比如 美国 英国 日本 爱沙尼亚
         var type = ctx.formParam("type"); // REGION OR SCHOOL
+        var joinEntry = ctx.formParam("joinEntry"); // 就是展示的 可以是加群问卷 可以是邮箱 也可以直接是群号 默认的话是传群号 记得在前端写好说明
 
-        if (isNull(groupId, name, region, type)) {
+        if (isNull(groupId, groupName, orgName, region, type, joinEntry)) {
             return Response.error(400, Map.of("message", "参数有问题"));
         }
 
@@ -46,7 +47,7 @@ public class AddGroupAPI extends API {
             return Response.error(400, Map.of("message", "无效的群类型"));
         }
 
-        var group = Group.builder().groupId(groupId).groupName(groupName).user(user).region(region).type(groupType).build();
+        var group = Group.builder().groupId(groupId).groupName(groupName).user(user).region(region).type(groupType).joinEntry(joinEntry).build();
         GroupManager.INSTANCE.addGroup(group);
 
         return Response.success(Map.of("message", "添加成功"));

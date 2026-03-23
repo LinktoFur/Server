@@ -15,6 +15,7 @@ public class Group {
     public User user;
     public GroupType type;
     public String groupId;
+    public String joinEntry;
     public String region;
     @Builder.Default
     public int id = 0;
