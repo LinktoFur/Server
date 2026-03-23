@@ -1,7 +1,6 @@
 package net.linktofur.user;
 
-import lombok.Builder;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -12,6 +11,8 @@ import java.util.UUID;
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
 @Builder
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     public UUID id;
     public String name;

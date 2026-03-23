@@ -63,6 +63,13 @@ public class Main {
                 log.info("All APIs have been registered.");
             }).start(2778);
 
+            net.linktofur.database.PersistenceManager.INSTANCE.load();
+
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                log.info("Shutting down... saving data.");
+                net.linktofur.database.PersistenceManager.INSTANCE.save();
+            }));
+
         } catch (Exception e) {
             log.error("Main execution failed", e);
         }

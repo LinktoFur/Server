@@ -1,5 +1,7 @@
 package net.linktofur.user;
 
+import net.linktofur.database.PersistenceManager;
+
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,6 +23,7 @@ public class UserManager {
             user.level = UserType.ADMIN;
         }
         users.put(user.id, user);
+        PersistenceManager.INSTANCE.save();
     }
 
     public User getUserByEmail(String email) {
@@ -33,5 +36,6 @@ public class UserManager {
 
     public void removeUser(User user) {
         users.remove(user.id);
+        PersistenceManager.INSTANCE.save();
     }
 }

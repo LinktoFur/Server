@@ -1,6 +1,6 @@
 package net.linktofur.group;
 
-import lombok.Builder;
+import lombok.*;
 import net.linktofur.user.User;
 
 /**
@@ -8,6 +8,8 @@ import net.linktofur.user.User;
  * @date 2026/3/16
  */
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Group {
     public String groupName;
     public User user;

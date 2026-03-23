@@ -1,8 +1,9 @@
 package net.linktofur.group;
 
+import net.linktofur.database.PersistenceManager;
+
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -20,6 +21,7 @@ public class GroupManager {
     public void addGroup(Group group) {
         group.id = groups.size() + 1;
         groups.put(group.id, group);
+        PersistenceManager.INSTANCE.save();
     }
 
     public Group getGroupById(Integer id) {
@@ -40,5 +42,6 @@ public class GroupManager {
 
     public void removeGroup(Integer id) {
         groups.remove(id);
+        PersistenceManager.INSTANCE.save();
     }
 }
