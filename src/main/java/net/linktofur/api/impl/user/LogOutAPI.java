@@ -1,11 +1,15 @@
 package net.linktofur.api.impl.user;
 
 import io.javalin.http.Context;
+import io.javalin.http.Cookie;
+import io.javalin.http.SameSite;
 import net.linktofur.api.API;
 import net.linktofur.api.Response;
+import net.linktofur.database.PersistenceManager;
 import net.linktofur.user.session.SessionManager;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author LangYa466
@@ -22,13 +26,23 @@ public class LogOutAPI extends API {
         var user = getUser(ctx);
 
         if (isNull(user)) {
-            return Response.error(401, Map.of("message", "未登入"));
+            return authError(ctx);
         }
 
         user.logoutAt = System.currentTimeMillis();
+        PersistenceManager.INSTANCE.save();
 
-        SessionManager.INSTANCE.removeSession(user.id);
-        ctx.removeCookie("sessionId", "/");
+        UUID sessionId = ctx.attribute("_sessionId");
+        if (sessionId != null) {
+            SessionManager.INSTANCE.removeSession(sessionId);
+        }
+        Cookie cookie = new Cookie("sessionId", "");
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setSameSite(SameSite.LAX);
+        cookie.setMaxAge(0);
+        ctx.cookie(cookie);
 
         return Response.success(Map.of("message", "登出成功"));
     }

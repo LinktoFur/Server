@@ -1,10 +1,13 @@
 package net.linktofur;
 
 import io.javalin.Javalin;
+
+import io.javalin.http.Handler;
 import lombok.extern.slf4j.Slf4j;
 import net.linktofur.api.API;
 import net.linktofur.api.APIManager;
 import net.linktofur.api.Response;
+import net.linktofur.database.PersistenceManager;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -47,27 +50,38 @@ public class Main {
 
     public static void main(String[] args) {
         try {
+            PersistenceManager.INSTANCE.load();
+            PersistenceManager.INSTANCE.startAutoSave();
+
             app = Javalin.create(config -> {
+                // CORS
+                config.routes.before(ctx -> {
+                    ctx.header("Access-Control-Allow-Origin", "*");
+                    ctx.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+                    ctx.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+                });
+                config.routes.options("/*", ctx -> ctx.status(204));
+
                 for (API api : APIManager.INSTANCE.apis) {
-                    config.routes.get(api.name, ctx -> {
+                    Handler handler = ctx -> {
                         try {
                             Response response = api.run(ctx);
                             ctx.status(response.code).json(response);
                         } catch (Exception e) {
                             log.error("API {} execution failed", api.name, e);
-                            ctx.status(500).json(Response.error(500, Map.of("message", "服务器错误")));
+                            ctx.status(500).json(Response.error(500, Map.of("message", "服务器错误 如果你是正常访问出现该错误 请联系网站作者")));
                         }
-                    });
+                    };
+                    config.routes.get(api.name, handler);
+                    config.routes.post(api.name, handler);
                     log.info("Registered API: {}", api.name);
                 }
                 log.info("All APIs have been registered.");
             }).start(2778);
 
-            net.linktofur.database.PersistenceManager.INSTANCE.load();
-
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 log.info("Shutting down... saving data.");
-                net.linktofur.database.PersistenceManager.INSTANCE.save();
+                PersistenceManager.INSTANCE.save();
             }));
 
         } catch (Exception e) {

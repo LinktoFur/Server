@@ -6,6 +6,5 @@ package net.linktofur.user;
  */
 public enum UserType {
     NORMAL,
-    STAFF, // 群组管理员
     ADMIN // 网站管理员
 }

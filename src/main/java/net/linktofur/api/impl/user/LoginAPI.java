@@ -6,9 +6,10 @@ import io.javalin.http.SameSite;
 import lombok.extern.slf4j.Slf4j;
 import net.linktofur.api.API;
 import net.linktofur.api.Response;
+import net.linktofur.captcha.CaptchaManager;
 import net.linktofur.user.User;
 import net.linktofur.util.NotifyUtil;
-import org.mindrot.jbcrypt.BCrypt;
+import net.linktofur.database.PersistenceManager;
 import net.linktofur.user.UserManager;
 import net.linktofur.user.session.SessionManager;
 
@@ -23,7 +24,7 @@ import java.util.UUID;
 @Slf4j
 public class LoginAPI extends API {
     public LoginAPI() {
-        super("/user/login");
+        super("user/login");
     }
 
     @Override
@@ -41,7 +42,14 @@ public class LoginAPI extends API {
         }
 
         if (code == null) {
-            NotifyUtil.INSTANCE.send("Linktofur.net - 登录验证", "您的登录验证码为: " + user.getVerifyCode(), user);
+            String captchaId = ctx.formParam("captchaId");
+            String captchaAnswer = ctx.formParam("captchaAnswer");
+
+            if (!CaptchaManager.INSTANCE.validate(captchaId, captchaAnswer)) {
+                return Response.error(400, Map.of("message", "人机验证失败"));
+            }
+
+            NotifyUtil.MAIL.send("Linktofur.net - 登录验证", "您的登录验证码为: " + user.getVerifyCode(), user);
             return Response.success(Map.of("message", "验证码已发送到邮箱"));
         }
 
@@ -59,11 +67,14 @@ public class LoginAPI extends API {
 
             user.loginAt = System.currentTimeMillis();
             user.verifyCode = null;
+            PersistenceManager.INSTANCE.save();
 
             return Response.success(Map.of(
                     "message", "登录成功",
                     "name", user.name,
-                    "email", user.email
+                    "email", user.email,
+                    "sessionId", sessionId.toString(),
+                    "level", user.level.name()
             ));
         } else {
             return Response.error(400, Map.of("message", "验证码错误"));

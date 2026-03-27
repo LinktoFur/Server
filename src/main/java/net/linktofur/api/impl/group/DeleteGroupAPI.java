@@ -22,11 +22,7 @@ public class DeleteGroupAPI extends API {
         var user = getUser(ctx);
 
         if (isNull(user)) {
-            return Response.error(401, Map.of("message", "未登入"));
-        }
-
-        if (!user.isAdmin()) {
-            return Response.error(403, Map.of("message", "权限不足"));
+            return authError(ctx);
         }
 
         var id = ctx.formParam("id");
@@ -35,7 +31,24 @@ public class DeleteGroupAPI extends API {
             return Response.error(400, Map.of("message", "参数有问题"));
         }
 
-        Integer groupId = Integer.valueOf(id);
+        int groupId;
+        try {
+            groupId = Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            return Response.error(400, Map.of("message", "参数有问题"));
+        }
+
+        var group = GroupManager.INSTANCE.getGroupById(groupId);
+
+        if (isNull(group)) {
+            return Response.error(404, Map.of("message", "群不存在"));
+        }
+
+        // 管理员才能删除
+        if (!user.isAdmin()) {
+            return Response.error(403, Map.of("message", "权限不足"));
+        }
+
         GroupManager.INSTANCE.removeGroup(groupId);
         return Response.success(Map.of("message", "删除成功"));
     }

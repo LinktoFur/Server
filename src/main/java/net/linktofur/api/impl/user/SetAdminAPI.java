@@ -6,20 +6,20 @@ import net.linktofur.api.API;
 import net.linktofur.api.Response;
 import net.linktofur.database.PersistenceManager;
 import net.linktofur.user.UserManager;
-import net.linktofur.util.NotifyUtil;
+import net.linktofur.user.UserType;
 
 import java.util.Map;
 import java.util.UUID;
 
 /**
  * @author LangYa466
- * @date 2026/3/16
+ * @date 2026/3/27
  */
 @SuppressWarnings({"DataFlowIssue", "unused"})
 @Slf4j
-public class BanUserAPI extends API {
-    public BanUserAPI() {
-        super("user/ban");
+public class SetAdminAPI extends API {
+    public SetAdminAPI() {
+        super("user/setadmin");
     }
 
     @Override
@@ -44,12 +44,11 @@ public class BanUserAPI extends API {
         try {
             userId = UUID.fromString(rawUserId);
         } catch (IllegalArgumentException e) {
-
             return Response.error(400, Map.of("message", "参数有问题"));
         }
 
         if (userId.equals(user.id)) {
-            return Response.error(400, Map.of("message", "无法封禁自己"));
+            return Response.error(400, Map.of("message", "无法操作自己"));
         }
 
         var targetUser = UserManager.INSTANCE.getUserById(userId);
@@ -58,18 +57,15 @@ public class BanUserAPI extends API {
             return Response.error(404, Map.of("message", "用户不存在"));
         }
 
-        targetUser.banned = true;
+        if (targetUser.isAdmin()) {
+            return Response.error(400, Map.of("message", "该用户已是管理员"));
+        }
+
+        targetUser.level = UserType.ADMIN;
         PersistenceManager.INSTANCE.save();
 
-        log.info("User {} banned by {}", targetUser.name, user.name);
+        log.info("User {} promoted to admin by {}", targetUser.name, user.name);
 
-        NotifyUtil.MAIL.send("Linktofur.net - 账号封禁通知",
-                "您的账号已被管理员封禁，如有疑问请联系管理员。", targetUser);
-
-        NotifyUtil.BOT.send(String.format(
-                "用户封禁\n操作者: %s（管理员）\n邮箱: %s\n\n被封禁用户: %s\n邮箱: %s",
-                user.name, user.email, targetUser.name, targetUser.email));
-
-        return Response.success(Map.of("message", "封禁成功"));
+        return Response.success(Map.of("message", "已设为管理员"));
     }
 }

@@ -45,3 +45,4 @@ bin/
 logs/
 config.toml
 data.json
+Web/

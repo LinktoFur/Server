@@ -1,5 +1,7 @@
 package net.linktofur.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import java.util.UUID;
@@ -13,6 +15,7 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     public UUID id;
     public String name;
@@ -39,6 +42,7 @@ public class User {
         return verifyCode;
     }
 
+    @JsonIgnore
     public boolean isAdmin() {
         return level == UserType.ADMIN;
     }

@@ -25,6 +25,8 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.21.1")
 
     implementation("org.mindrot:jbcrypt:0.4")
+
+    implementation("com.github.penggle:kaptcha:2.3.2")
 }
 
 tasks.jar {
