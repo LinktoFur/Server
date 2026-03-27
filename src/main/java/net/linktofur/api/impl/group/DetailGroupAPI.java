@@ -43,14 +43,15 @@ public class DetailGroupAPI extends API {
         if (group.type == GroupType.SCHOOL) {
             return Response.success(Map.of(
                     "found", "true",
-                    "school", group.groupName,
-                    "org", group.groupName,
+                    "groupName", group.groupName,
+                    "orgName", group.orgName,
                     "region", group.region
             ));
         } else {
             return Response.success(Map.of(
                     "found", "true",
-                    "org", group.groupName,
+                    "groupName", group.groupName,
+                    "orgName", group.orgName,
                     "intro", group.region + "地区联合群"
             ));
         }
