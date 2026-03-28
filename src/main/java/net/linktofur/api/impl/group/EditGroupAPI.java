@@ -106,7 +106,7 @@ public class EditGroupAPI extends API {
 
             var reviewUrl = Main.url + "?review=" + group.id;
             var message = String.format(
-                    "群组修改审核请求\n提交者: %s（用户）\n邮箱: %s\n\\n修改内容:%s\n审核链接: %s",
+                    "群组修改审核请求\n提交者: %s（用户）\n邮箱: %s\n修改内容:%s\n审核链接: %s",
                     user.name, user.email, changeLines, reviewUrl
             );
             NotifyUtil.BOT.send(message);

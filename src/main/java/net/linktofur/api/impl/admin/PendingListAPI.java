@@ -1,4 +1,4 @@
-package net.linktofur.api.impl.group;
+package net.linktofur.api.impl.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
@@ -21,7 +21,7 @@ public class PendingListAPI extends API {
     private final ObjectMapper MAPPER = new ObjectMapper();
 
     public PendingListAPI() {
-        super("group/pending");
+        super("admin/pending");
     }
 
     @Override

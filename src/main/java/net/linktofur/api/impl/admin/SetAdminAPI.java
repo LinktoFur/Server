@@ -1,4 +1,4 @@
-package net.linktofur.api.impl.user;
+package net.linktofur.api.impl.admin;
 
 import io.javalin.http.Context;
 import lombok.extern.slf4j.Slf4j;
@@ -6,7 +6,7 @@ import net.linktofur.api.API;
 import net.linktofur.api.Response;
 import net.linktofur.database.PersistenceManager;
 import net.linktofur.user.UserManager;
-import net.linktofur.util.NotifyUtil;
+import net.linktofur.user.UserType;
 
 import java.util.Map;
 import java.util.UUID;
@@ -17,9 +17,9 @@ import java.util.UUID;
  */
 @SuppressWarnings({"DataFlowIssue", "unused"})
 @Slf4j
-public class UnbanUserAPI extends API {
-    public UnbanUserAPI() {
-        super("user/unban");
+public class SetAdminAPI extends API {
+    public SetAdminAPI() {
+        super("admin/setadmin");
     }
 
     @Override
@@ -47,28 +47,25 @@ public class UnbanUserAPI extends API {
             return Response.error(400, Map.of("message", "参数有问题"));
         }
 
+        if (userId.equals(user.id)) {
+            return Response.error(400, Map.of("message", "无法操作自己"));
+        }
+
         var targetUser = UserManager.INSTANCE.getUserById(userId);
 
         if (isNull(targetUser)) {
             return Response.error(404, Map.of("message", "用户不存在"));
         }
 
-        if (!targetUser.banned) {
-            return Response.error(400, Map.of("message", "该用户未被封禁"));
+        if (targetUser.isAdmin()) {
+            return Response.error(400, Map.of("message", "该用户已是管理员"));
         }
 
-        targetUser.banned = false;
+        targetUser.level = UserType.ADMIN;
         PersistenceManager.INSTANCE.save();
 
-        log.info("User {} unbanned by {}", targetUser.name, user.name);
+        log.info("User {} promoted to admin by {}", targetUser.name, user.name);
 
-        NotifyUtil.MAIL.send("Linktofur.net - 账号解封通知",
-                "您的账号已被管理员解封，现在可以正常使用了。", targetUser);
-
-        NotifyUtil.BOT.send(String.format(
-                "用户解封\n操作者: %s（管理员）\n邮箱: %s\n\n被解封用户: %s\n邮箱: %s",
-                user.name, user.email, targetUser.name, targetUser.email));
-
-        return Response.success(Map.of("message", "解封成功"));
+        return Response.success(Map.of("message", "已设为管理员"));
     }
 }

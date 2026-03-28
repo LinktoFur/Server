@@ -1,4 +1,4 @@
-package net.linktofur.api.impl.group;
+package net.linktofur.api.impl.admin;
 
 import io.javalin.http.Context;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import java.util.Map;
 @Slf4j
 public class ApproveGroupAPI extends API {
     public ApproveGroupAPI() {
-        super("group/approve");
+        super("admin/approve");
     }
 
     @Override

@@ -1,4 +1,4 @@
-package net.linktofur.api.impl.user;
+package net.linktofur.api.impl.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Context;
@@ -19,7 +19,7 @@ public class UserListAPI extends API {
     private final ObjectMapper MAPPER = new ObjectMapper();
 
     public UserListAPI() {
-        super("user/list");
+        super("admin/userlist");
     }
 
     @Override

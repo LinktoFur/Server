@@ -1,4 +1,4 @@
-package net.linktofur.api.impl.group;
+package net.linktofur.api.impl.admin;
 
 import io.javalin.http.Context;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import java.util.Map;
 @Slf4j
 public class RejectGroupAPI extends API {
     public RejectGroupAPI() {
-        super("group/reject");
+        super("admin/reject");
     }
 
     @Override

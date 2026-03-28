@@ -1,4 +1,4 @@
-package net.linktofur.api.impl.user;
+package net.linktofur.api.impl.admin;
 
 import io.javalin.http.Context;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @Slf4j
 public class BanUserAPI extends API {
     public BanUserAPI() {
-        super("user/ban");
+        super("admin/ban");
     }
 
     @Override

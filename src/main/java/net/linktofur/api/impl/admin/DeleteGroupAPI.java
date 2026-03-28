@@ -1,4 +1,4 @@
-package net.linktofur.api.impl.group;
+package net.linktofur.api.impl.admin;
 
 import io.javalin.http.Context;
 import net.linktofur.api.API;
@@ -14,7 +14,7 @@ import java.util.Map;
 @SuppressWarnings({"unused", "DataFlowIssue"})
 public class DeleteGroupAPI extends API {
     public DeleteGroupAPI() {
-        super("group/delete");
+        super("admin/deletegroup");
     }
 
     @Override
@@ -23,6 +23,11 @@ public class DeleteGroupAPI extends API {
 
         if (isNull(user)) {
             return authError(ctx);
+        }
+
+        // 管理员才能删除
+        if (!user.isAdmin()) {
+            return Response.error(403, Map.of("message", "权限不足"));
         }
 
         var id = ctx.formParam("id");
@@ -42,11 +47,6 @@ public class DeleteGroupAPI extends API {
 
         if (isNull(group)) {
             return Response.error(404, Map.of("message", "群不存在"));
-        }
-
-        // 管理员才能删除
-        if (!user.isAdmin()) {
-            return Response.error(403, Map.of("message", "权限不足"));
         }
 
         GroupManager.INSTANCE.removeGroup(groupId);
