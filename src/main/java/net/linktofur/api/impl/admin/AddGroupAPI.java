@@ -20,8 +20,8 @@ import java.util.UUID;
  */
 @Slf4j
 @SuppressWarnings({"DataFlowIssue", "unused"})
-public class AdminAddGroupAPI extends API {
-    public AdminAddGroupAPI() {
+public class AddGroupAPI extends API {
+    public AddGroupAPI() {
         super("admin/addgroup");
     }
 

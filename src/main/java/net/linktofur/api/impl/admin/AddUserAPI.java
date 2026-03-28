@@ -17,8 +17,8 @@ import java.util.UUID;
  */
 @SuppressWarnings({"DataFlowIssue", "unused"})
 @Slf4j
-public class AdminAddUserAPI extends API {
-    public AdminAddUserAPI() {
+public class AddUserAPI extends API {
+    public AddUserAPI() {
         super("admin/adduser");
     }
 
