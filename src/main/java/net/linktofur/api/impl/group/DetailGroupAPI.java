@@ -7,6 +7,7 @@ import net.linktofur.group.Group;
 import net.linktofur.group.GroupManager;
 import net.linktofur.group.GroupType;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -40,20 +41,21 @@ public class DetailGroupAPI extends API {
             return Response.error(404, Map.of("message", "群不存在", "found", "false"));
         }
 
+        var result = new HashMap<String, String>();
+        result.put("found", "true");
+        result.put("groupName", group.groupName);
+        result.put("orgName", group.orgName);
+        result.put("showContact", String.valueOf(group.showContact));
+        result.put("acceptApply", String.valueOf(group.acceptApply));
+
+        if (group.showContact) result.put("contact", group.joinEntry);
+
         if (group.type == GroupType.SCHOOL) {
-            return Response.success(Map.of(
-                    "found", "true",
-                    "groupName", group.groupName,
-                    "orgName", group.orgName,
-                    "region", group.region
-            ));
+            result.put("region", group.region);
         } else {
-            return Response.success(Map.of(
-                    "found", "true",
-                    "groupName", group.groupName,
-                    "orgName", group.orgName,
-                    "intro", group.region + "地区联合群"
-            ));
+            result.put("intro", group.region + "地区联合群");
         }
+
+        return Response.success(result);
     }
 }

@@ -33,6 +33,12 @@ public class Group {
     @Builder.Default
     public long createdAt = System.currentTimeMillis();
 
+    @Builder.Default
+    public boolean showContact = false;
+
+    @Builder.Default
+    public boolean acceptApply = true;
+
     // 待审核的修改内容 null表示没有待审核修改
     public Map<String, String> pendingEdit;
 

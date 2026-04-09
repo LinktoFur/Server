@@ -50,6 +50,8 @@ public class GroupListAPI extends API {
                         map.put("userName", owner != null ? owner.name : "");
                     }
                     map.put("pending", String.valueOf(g.pending));
+                    map.put("showContact", String.valueOf(g.showContact));
+                    map.put("acceptApply", String.valueOf(g.acceptApply));
                     map.put("hasPendingEdit", String.valueOf(g.pendingEdit != null && !g.pendingEdit.isEmpty()));
                     map.put("createdAt", String.valueOf(g.createdAt));
                     return map;

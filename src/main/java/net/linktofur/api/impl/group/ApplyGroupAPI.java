@@ -53,6 +53,10 @@ public class ApplyGroupAPI extends API {
             return Response.error(404, Map.of("message", "群不存在"));
         }
 
+        if (!group.acceptApply) {
+            return Response.error(403, Map.of("message", "该群组暂不接收申请"));
+        }
+
         User owner = group.getUser();
         if (owner == null) {
             return Response.error(500, Map.of("message", "该群组暂无联系人"));

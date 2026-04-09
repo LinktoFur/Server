@@ -6,6 +6,7 @@ import net.linktofur.Main;
 import net.linktofur.api.API;
 import net.linktofur.api.Response;
 import net.linktofur.database.PersistenceManager;
+import net.linktofur.group.Group;
 import net.linktofur.group.GroupManager;
 import net.linktofur.group.GroupType;
 import net.linktofur.util.NotifyUtil;
@@ -51,83 +52,87 @@ public class EditGroupAPI extends API {
             return Response.error(404, Map.of("message", "群不存在"));
         }
 
-        // 只有群主或管理员可以修改
         if (!user.isAdmin() && !user.id.equals(group.userId)) {
             return Response.error(403, Map.of("message", "权限不足"));
         }
 
-        var groupIdStr = ctx.formParam("groupId");
-        var groupName = ctx.formParam("groupName");
-        var orgName = ctx.formParam("orgName");
-        var region = ctx.formParam("region");
-        var type = ctx.formParam("type");
-        var joinEntry = ctx.formParam("joinEntry");
-
         var edit = new HashMap<String, String>();
-        if (groupIdStr != null && !groupIdStr.isEmpty()) edit.put("groupId", groupIdStr);
-        if (groupName != null && !groupName.isEmpty()) edit.put("groupName", groupName);
-        if (orgName != null && !orgName.isEmpty()) edit.put("orgName", orgName);
-        if (region != null && !region.isEmpty()) edit.put("region", region);
-        if (joinEntry != null && !joinEntry.isEmpty()) edit.put("joinEntry", joinEntry);
-        if (type != null && !type.isEmpty()) edit.put("type", type);
+        for (var key : new String[]{"groupId", "groupName", "orgName", "region", "type", "joinEntry"}) {
+            var val = ctx.formParam(key);
+            if (val != null && !val.isEmpty()) edit.put(key, val);
+        }
+
+        for (var key : new String[]{"showContact", "acceptApply"}) {
+            var val = ctx.formParam(key);
+            if (val != null) edit.put(key, val);
+        }
 
         if (edit.isEmpty()) {
             return Response.error(400, Map.of("message", "没有需要修改的内容"));
         }
 
         var changeLines = formatChanges(edit);
-        var roleTag = user.isAdmin() ? "管理员" : "用户";
 
         if (user.isAdmin()) {
-            if (groupIdStr != null && !groupIdStr.isEmpty()) group.groupId = groupIdStr;
-            if (groupName != null && !groupName.isEmpty()) group.groupName = groupName;
-            if (orgName != null && !orgName.isEmpty()) group.orgName = orgName;
-            if (region != null && !region.isEmpty()) group.region = region;
-            if (joinEntry != null && !joinEntry.isEmpty()) group.joinEntry = joinEntry;
-            if (type != null && !type.isEmpty()) {
-                var groupType = GroupType.parse(type);
-                if (groupType != null) group.type = groupType;
-            }
+            // 管理员直接应用修改
+            applyEdit(group, edit);
             group.pendingEdit = null;
             PersistenceManager.INSTANCE.save();
             log.info("Group {} edited directly by admin {}", group.groupName, user.name);
 
-            var message = String.format(
+            NotifyUtil.BOT.send(String.format(
                     "群组信息已修改（管理员直接修改）\n操作者: %s（管理员）\n邮箱: %s\n\n修改内容:%s",
                     user.name, user.email, changeLines
-            );
-            NotifyUtil.BOT.send(message);
-
+            ));
             return Response.success(Map.of("message", "修改成功"));
         } else {
+            // 普通用户提交审核
             group.pendingEdit = edit;
             PersistenceManager.INSTANCE.save();
             log.info("Group {} edit submitted for review by {}", group.groupName, user.name);
 
             var reviewUrl = Main.url + "?review=" + group.id;
-            var message = String.format(
+            NotifyUtil.BOT.send(String.format(
                     "群组修改审核请求\n提交者: %s（用户）\n邮箱: %s\n修改内容:%s\n审核链接: %s",
                     user.name, user.email, changeLines, reviewUrl
-            );
-            NotifyUtil.BOT.send(message);
-
+            ));
             return Response.success(Map.of("message", "修改已提交审核"));
         }
     }
 
-    private static final Map<String, String> en2cnMap = Map.of(
-            "groupId", "群号",
-            "groupName", "群名",
-            "orgName", "组织",
-            "region", "地区",
-            "type", "类型",
-            "joinEntry", "加群方式"
+    private void applyEdit(Group group, Map<String, String> edit) {
+        edit.forEach((key, val) -> {
+            switch (key) {
+                case "groupId" -> group.groupId = val;
+                case "groupName" -> group.groupName = val;
+                case "orgName" -> group.orgName = val;
+                case "region" -> group.region = val;
+                case "joinEntry" -> group.joinEntry = val;
+                case "type" -> {
+                    var parsed = GroupType.parse(val);
+                    if (parsed != null) group.type = parsed;
+                }
+                case "showContact" -> group.showContact = Boolean.parseBoolean(val);
+                case "acceptApply" -> group.acceptApply = Boolean.parseBoolean(val);
+            }
+        });
+    }
+
+    private static final Map<String, String> EN_TO_CN = Map.ofEntries(
+            Map.entry("groupId", "群号"),
+            Map.entry("groupName", "群名"),
+            Map.entry("orgName", "组织"),
+            Map.entry("region", "地区"),
+            Map.entry("type", "类型"),
+            Map.entry("joinEntry", "加群方式"),
+            Map.entry("showContact", "展示联系方式"),
+            Map.entry("acceptApply", "接收申请")
     );
 
     private String formatChanges(Map<String, String> edit) {
         var sb = new StringBuilder();
         edit.forEach((k, v) -> {
-            var label = en2cnMap.getOrDefault(k, k);
+            var label = EN_TO_CN.getOrDefault(k, k);
             var display = "type".equals(k) ? ("SCHOOL".equals(v) ? "院校群" : "地区联合群") : v;
             sb.append(String.format("\n  %s: %s", label, display));
         });
