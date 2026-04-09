@@ -52,8 +52,6 @@ public class DetailGroupAPI extends API {
 
         if (group.type == GroupType.SCHOOL) {
             result.put("region", group.region);
-        } else {
-            result.put("intro", group.region + "地区联合群");
         }
 
         return Response.success(result);
