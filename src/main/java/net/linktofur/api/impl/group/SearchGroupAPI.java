@@ -25,7 +25,7 @@ public class SearchGroupAPI extends API {
 
     @Override
     public Response run(Context ctx) throws Exception {
-        var content = ctx.queryParam("content");
+        var content = ctx.queryParam("content").trim();
         var type = ctx.queryParam("type"); // SCHOOL or REGION
 
         if (isNull(content)) {
