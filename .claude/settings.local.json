@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew build:*)",
+      "Bash(npx tsc:*)",
+      "Bash(jar tf:*)",
+      "Bash(javap -public -cp \"C:/Users/langya/WEB/Linktofur-Server/build/libs/main.jar\" io.javalin.config.RouterConfig)"
+    ]
+  }
+}

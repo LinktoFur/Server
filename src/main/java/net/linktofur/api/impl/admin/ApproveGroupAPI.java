@@ -66,6 +66,8 @@ public class ApproveGroupAPI extends API {
                 var groupType = GroupType.parse(edit.get("type"));
                 if (groupType != null) group.type = groupType;
             }
+            if (edit.containsKey("showContact")) group.showContact = Boolean.parseBoolean(edit.get("showContact"));
+            if (edit.containsKey("acceptApply")) group.acceptApply = Boolean.parseBoolean(edit.get("acceptApply"));
             group.pendingEdit = null;
 
             // 如果群本身不是pending 说明这是修改审核 不是新群审核
