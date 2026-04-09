@@ -56,18 +56,21 @@ public class ApproveGroupAPI extends API {
 
         // 处理待审核修改
         if (group.pendingEdit != null && !group.pendingEdit.isEmpty()) {
-            var edit = group.pendingEdit;
-            if (edit.containsKey("groupId")) group.groupId = edit.get("groupId");
-            if (edit.containsKey("groupName")) group.groupName = edit.get("groupName");
-            if (edit.containsKey("orgName")) group.orgName = edit.get("orgName");
-            if (edit.containsKey("region")) group.region = edit.get("region");
-            if (edit.containsKey("joinEntry")) group.joinEntry = edit.get("joinEntry");
-            if (edit.containsKey("type")) {
-                var groupType = GroupType.parse(edit.get("type"));
-                if (groupType != null) group.type = groupType;
-            }
-            if (edit.containsKey("showContact")) group.showContact = Boolean.parseBoolean(edit.get("showContact"));
-            if (edit.containsKey("acceptApply")) group.acceptApply = Boolean.parseBoolean(edit.get("acceptApply"));
+            group.pendingEdit.forEach((key, val) -> {
+                switch (key) {
+                    case "groupId" -> group.groupId = val;
+                    case "groupName" -> group.groupName = val;
+                    case "orgName" -> group.orgName = val;
+                    case "region" -> group.region = val;
+                    case "joinEntry" -> group.joinEntry = val;
+                    case "type" -> {
+                        var parsed = GroupType.parse(val);
+                        if (parsed != null) group.type = parsed;
+                    }
+                    case "showContact" -> group.showContact = Boolean.parseBoolean(val);
+                    case "acceptApply" -> group.acceptApply = Boolean.parseBoolean(val);
+                }
+            });
             group.pendingEdit = null;
 
             // 如果群本身不是pending 说明这是修改审核 不是新群审核

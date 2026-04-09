@@ -2,8 +2,9 @@ package net.linktofur.user.session;
 
 import lombok.extern.slf4j.Slf4j;
 
+import net.linktofur.database.PersistenceManager;
+
 import java.time.Duration;
-import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SessionManager {
     public static final SessionManager INSTANCE = new SessionManager();
     private static final Duration duration = Duration.ofDays(30);
-    private final Map<UUID, Session> sessions;
+    public Map<UUID, Session> sessions;
 
     private SessionManager() {
         sessions = new ConcurrentHashMap<>();
@@ -24,15 +25,17 @@ public class SessionManager {
 
     public UUID createSession(UUID userId) {
         var sessionId = UUID.randomUUID();
-        sessions.put(sessionId, new Session(userId, Instant.now().plus(duration)));
+        sessions.put(sessionId, new Session(userId, System.currentTimeMillis() + duration.toMillis()));
+        PersistenceManager.INSTANCE.save();
         return sessionId;
     }
 
     public UUID getUserId(UUID sessionId) {
         var session = sessions.get(sessionId);
         if (session == null) return null;
-        if (Instant.now().isAfter(session.expireAt)) {
+        if (System.currentTimeMillis() > session.expireAt) {
             sessions.remove(sessionId);
+            PersistenceManager.INSTANCE.save();
             return null;
         }
         return session.userId;
@@ -40,5 +43,6 @@ public class SessionManager {
 
     public void removeSession(UUID sessionId) {
         sessions.remove(sessionId);
+        PersistenceManager.INSTANCE.save();
     }
 }

@@ -1,8 +1,8 @@
 package net.linktofur.user.session;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -10,7 +10,8 @@ import java.util.UUID;
  * @date 2026/2/28
  */
 @AllArgsConstructor
+@NoArgsConstructor
 public class Session {
     public UUID userId;
-    public Instant expireAt;
+    public long expireAt;
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import net.linktofur.group.GroupManager;
 import net.linktofur.user.UserManager;
+import net.linktofur.user.session.SessionManager;
 
 import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,8 +43,11 @@ public class PersistenceManager {
             if (data.groups != null) {
                 GroupManager.INSTANCE.groups = new ConcurrentHashMap<>(data.groups);
             }
+            if (data.sessions != null) {
+                SessionManager.INSTANCE.sessions = new ConcurrentHashMap<>(data.sessions);
+            }
             GroupManager.INSTANCE.syncNextId();
-            log.info("Loaded {} users and {} groups from data.json", UserManager.INSTANCE.users.size(), GroupManager.INSTANCE.groups.size());
+            log.info("Loaded {} users, {} groups, and {} sessions from data.json", UserManager.INSTANCE.users.size(), GroupManager.INSTANCE.groups.size(), net.linktofur.user.session.SessionManager.INSTANCE.sessions.size());
         } catch (Exception e) {
             log.error("Failed to load data.json", e);
         }
@@ -83,6 +87,7 @@ public class PersistenceManager {
             Data data = new Data();
             data.users = UserManager.INSTANCE.users;
             data.groups = GroupManager.INSTANCE.groups;
+            data.sessions = SessionManager.INSTANCE.sessions;
             mapper.writerWithDefaultPrettyPrinter().writeValue(dbFile, data);
         } catch (Exception e) {
             log.error("Failed to save data.json at {}", dbFile.getAbsolutePath(), e);
