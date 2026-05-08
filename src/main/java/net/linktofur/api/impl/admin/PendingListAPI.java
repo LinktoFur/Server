@@ -21,7 +21,7 @@ public class PendingListAPI extends API {
     private final ObjectMapper MAPPER = new ObjectMapper();
 
     public PendingListAPI() {
-        super("admin/pending");
+        super("admin/pending", true);
     }
 
     @Override

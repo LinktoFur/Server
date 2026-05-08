@@ -19,7 +19,7 @@ public class UserSearchAPI extends API {
     private final ObjectMapper MAPPER = new ObjectMapper();
 
     public UserSearchAPI() {
-        super("admin/usersearch");
+        super("admin/usersearch", true);
     }
 
     @Override

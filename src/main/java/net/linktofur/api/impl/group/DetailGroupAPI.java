@@ -17,7 +17,7 @@ import java.util.Map;
 @SuppressWarnings({"DataFlowIssue", "unused"})
 public class DetailGroupAPI extends API {
     public DetailGroupAPI() {
-        super("group/detail");
+        super("group/detail", true);
     }
 
     @Override

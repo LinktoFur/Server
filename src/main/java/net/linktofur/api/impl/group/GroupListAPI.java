@@ -21,7 +21,7 @@ public class GroupListAPI extends API {
     private final ObjectMapper MAPPER = new ObjectMapper();
 
     public GroupListAPI() {
-        super("group/list");
+        super("group/list", true);
     }
 
     @Override

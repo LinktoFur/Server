@@ -13,7 +13,7 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class TestAPI extends API {
     public TestAPI() {
-        super("/");
+        super("/", true);
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class CaptchaAPI extends API {
     public CaptchaAPI() {
-        super("captcha/generate");
+        super("captcha/generate", true);
     }
 
     @Override

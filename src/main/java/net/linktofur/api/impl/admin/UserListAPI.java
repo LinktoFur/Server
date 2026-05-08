@@ -19,7 +19,7 @@ public class UserListAPI extends API {
     private final ObjectMapper MAPPER = new ObjectMapper();
 
     public UserListAPI() {
-        super("admin/userlist");
+        super("admin/userlist", true);
     }
 
     @Override

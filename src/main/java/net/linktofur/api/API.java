@@ -1,7 +1,6 @@
 package net.linktofur.api;
 
 import io.javalin.http.Context;
-import lombok.AllArgsConstructor;
 import net.linktofur.user.User;
 import net.linktofur.user.UserManager;
 import net.linktofur.user.session.SessionManager;
@@ -14,9 +13,18 @@ import java.util.UUID;
  * @author LangYa466
  * @date 2026/2/27
  */
-@AllArgsConstructor
 public abstract class API {
-    public String name;
+    public final String name;
+    public final boolean readOnly;
+
+    protected API(String name) {
+        this(name, false);
+    }
+
+    protected API(String name, boolean readOnly) {
+        this.name = name;
+        this.readOnly = readOnly;
+    }
 
     public Response run(Context ctx) throws Exception {
         return null;

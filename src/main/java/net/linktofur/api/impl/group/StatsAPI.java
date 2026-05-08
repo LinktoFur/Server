@@ -15,7 +15,7 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class StatsAPI extends API {
     public StatsAPI() {
-        super("group/stats");
+        super("group/stats", true);
     }
 
     @Override

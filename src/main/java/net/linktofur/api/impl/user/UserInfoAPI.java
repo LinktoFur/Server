@@ -13,7 +13,7 @@ import java.util.Map;
 @SuppressWarnings({"unused"})
 public class UserInfoAPI extends API {
     public UserInfoAPI() {
-        super("user/me");
+        super("user/me", true);
     }
 
     @Override
