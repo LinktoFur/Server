@@ -77,24 +77,24 @@ public class EditGroupAPI extends API {
             // 管理员直接应用修改
             applyEdit(group, edit);
             group.pendingEdit = null;
-            PersistenceManager.INSTANCE.save();
+            PersistenceManager.INSTANCE.markDirty();
             log.info("Group {} edited directly by admin {}", group.groupName, user.name);
 
             NotifyUtil.BOT.send(String.format(
                     "群组信息已修改（管理员直接修改）\n操作者: %s（管理员）\n邮箱: %s\n\n修改内容:%s",
-                    user.name, user.email, changeLines
+                    NotifyUtil.escapeCq(user.name), NotifyUtil.escapeCq(user.email), changeLines
             ));
             return Response.success(Map.of("message", "修改成功"));
         } else {
             // 普通用户提交审核
             group.pendingEdit = edit;
-            PersistenceManager.INSTANCE.save();
+            PersistenceManager.INSTANCE.markDirty();
             log.info("Group {} edit submitted for review by {}", group.groupName, user.name);
 
             var reviewUrl = Main.url + "?review=" + group.id;
             NotifyUtil.BOT.send(String.format(
                     "群组修改审核请求\n提交者: %s（用户）\n邮箱: %s\n修改内容:%s\n审核链接: %s",
-                    user.name, user.email, changeLines, reviewUrl
+                    NotifyUtil.escapeCq(user.name), NotifyUtil.escapeCq(user.email), changeLines, reviewUrl
             ));
             return Response.success(Map.of("message", "修改已提交审核"));
         }
@@ -133,7 +133,7 @@ public class EditGroupAPI extends API {
         var sb = new StringBuilder();
         edit.forEach((k, v) -> {
             var label = EN_TO_CN.getOrDefault(k, k);
-            var display = "type".equals(k) ? ("SCHOOL".equals(v) ? "院校群" : "地区联合群") : v;
+            var display = "type".equals(k) ? ("SCHOOL".equals(v) ? "院校群" : "地区联合群") : NotifyUtil.escapeCq(v);
             sb.append(String.format("\n  %s: %s", label, display));
         });
         return sb.toString();

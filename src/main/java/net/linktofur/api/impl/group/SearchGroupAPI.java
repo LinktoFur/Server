@@ -20,16 +20,23 @@ public class SearchGroupAPI extends API {
     private final ObjectMapper MAPPER = new ObjectMapper();
 
     public SearchGroupAPI() {
-        super("group/search");
+        super("group/search", true);
     }
 
     @Override
     public Response run(Context ctx) throws Exception {
-        var content = ctx.queryParam("content").trim();
+        var rawContent = ctx.queryParam("content");
         var type = ctx.queryParam("type"); // SCHOOL or REGION
 
-        if (isNull(content)) {
+        if (isNull(rawContent)) {
             return Response.error(400, Map.of("message", "参数有问题"));
+        }
+        var content = rawContent.trim();
+        if (content.length() < 2) {
+            return Response.error(400, Map.of("message", "请输入至少 2 个字"));
+        }
+        if (content.length() > 64) {
+            return Response.error(400, Map.of("message", "搜索内容过长"));
         }
 
         GroupType filterType = null;
@@ -44,7 +51,9 @@ public class SearchGroupAPI extends API {
             if (group.pending) return; // 过滤待审核
             if (finalFilterType != null && group.type != finalFilterType) return;
 
-            if (group.groupName.contains(content) || group.region.contains(content)) {
+            var nameMatch = group.groupName != null && group.groupName.contains(content);
+            var regionMatch = group.region != null && group.region.contains(content);
+            if (nameMatch || regionMatch) {
                 if (group.type == GroupType.SCHOOL) {
                     results.add(Map.of(
                             "id", String.valueOf(group.id),

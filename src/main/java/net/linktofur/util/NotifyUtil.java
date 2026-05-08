@@ -20,6 +20,31 @@ public class NotifyUtil {
     public static final Mail MAIL = new Mail();
     public static final Bot BOT = new Bot();
 
+    public static String escapeHtml(String s) {
+        if (s == null) return "";
+        return s.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
+    }
+
+    // OneBot 11 字符串消息中 [] & 是 CQ 码语法 用户输入需转义
+    public static String escapeCq(String s) {
+        if (s == null) return "";
+        return s.replace("&", "&amp;")
+                .replace("[", "&#91;")
+                .replace("]", "&#93;")
+                .replace(",", "&#44;");
+    }
+
+    public static String maskEmail(String email) {
+        if (email == null) return "";
+        int at = email.indexOf('@');
+        if (at <= 1) return "***" + (at >= 0 ? email.substring(at) : "");
+        return email.charAt(0) + "***" + email.substring(at);
+    }
+
     @Slf4j
     public static class Mail {
         private final HttpClient client = HttpClient.newHttpClient();

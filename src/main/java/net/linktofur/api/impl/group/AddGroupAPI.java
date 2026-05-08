@@ -59,7 +59,9 @@ public class AddGroupAPI extends API {
         var reviewUrl = Main.url + "?review=" + group.id;
         var message = String.format(
                 "审核请求\n提交者: %s（%s）\n邮箱: %s\n身份: %s\n\n群名: %s\n组织: %s\n地区: %s\n类型: %s\n加群方式: %s\n审核链接: %s",
-                user.name, roleTag, user.email, roleTag, groupName, orgName, region, typeName, joinEntry, reviewUrl
+                NotifyUtil.escapeCq(user.name), roleTag, NotifyUtil.escapeCq(user.email), roleTag,
+                NotifyUtil.escapeCq(groupName), NotifyUtil.escapeCq(orgName), NotifyUtil.escapeCq(region),
+                typeName, NotifyUtil.escapeCq(joinEntry), reviewUrl
         );
         NotifyUtil.BOT.send(message);
 

@@ -59,7 +59,7 @@ public class BanUserAPI extends API {
         }
 
         targetUser.banned = true;
-        PersistenceManager.INSTANCE.save();
+        PersistenceManager.INSTANCE.markDirty();
 
         log.info("User {} banned by {}", targetUser.name, user.name);
 
@@ -68,7 +68,8 @@ public class BanUserAPI extends API {
 
         NotifyUtil.BOT.send(String.format(
                 "用户封禁\n操作者: %s（管理员）\n邮箱: %s\n\n被封禁用户: %s\n邮箱: %s",
-                user.name, user.email, targetUser.name, targetUser.email));
+                NotifyUtil.escapeCq(user.name), NotifyUtil.escapeCq(user.email),
+                NotifyUtil.escapeCq(targetUser.name), NotifyUtil.escapeCq(targetUser.email)));
 
         return Response.success(Map.of("message", "封禁成功"));
     }

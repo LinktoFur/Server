@@ -58,7 +58,7 @@ public class UnbanUserAPI extends API {
         }
 
         targetUser.banned = false;
-        PersistenceManager.INSTANCE.save();
+        PersistenceManager.INSTANCE.markDirty();
 
         log.info("User {} unbanned by {}", targetUser.name, user.name);
 
@@ -67,7 +67,8 @@ public class UnbanUserAPI extends API {
 
         NotifyUtil.BOT.send(String.format(
                 "用户解封\n操作者: %s（管理员）\n邮箱: %s\n\n被解封用户: %s\n邮箱: %s",
-                user.name, user.email, targetUser.name, targetUser.email));
+                NotifyUtil.escapeCq(user.name), NotifyUtil.escapeCq(user.email),
+                NotifyUtil.escapeCq(targetUser.name), NotifyUtil.escapeCq(targetUser.email)));
 
         return Response.success(Map.of("message", "解封成功"));
     }
