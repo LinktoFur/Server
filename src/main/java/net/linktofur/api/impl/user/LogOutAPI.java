@@ -30,7 +30,7 @@ public class LogOutAPI extends API {
         }
 
         user.logoutAt = System.currentTimeMillis();
-        PersistenceManager.INSTANCE.save();
+        PersistenceManager.INSTANCE.markDirty();
 
         UUID sessionId = ctx.attribute("_sessionId");
         if (sessionId != null) {

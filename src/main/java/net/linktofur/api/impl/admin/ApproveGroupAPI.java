@@ -75,7 +75,7 @@ public class ApproveGroupAPI extends API {
 
             // 如果群本身不是pending 说明这是修改审核 不是新群审核
             if (!group.pending) {
-                PersistenceManager.INSTANCE.save();
+                PersistenceManager.INSTANCE.markDirty();
                 log.info("Group {} edit approved by {}", group.groupName, user.name);
 
                 var content = String.format("您对群组「%s」的修改已通过审核", group.groupName);
@@ -92,7 +92,7 @@ public class ApproveGroupAPI extends API {
         }
 
         group.pending = false;
-        PersistenceManager.INSTANCE.save();
+        PersistenceManager.INSTANCE.markDirty();
 
         log.info("Group {} approved by {}", group.groupName, user.name);
 

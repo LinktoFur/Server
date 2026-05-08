@@ -58,7 +58,7 @@ public class RejectGroupAPI extends API {
         // 处理待审核修改的拒绝
         if (group.pendingEdit != null && !group.pendingEdit.isEmpty() && !group.pending) {
             group.pendingEdit = null;
-            PersistenceManager.INSTANCE.save();
+            PersistenceManager.INSTANCE.markDirty();
 
             var content = String.format("您对群组「%s」的修改未通过审核\n原因: %s", group.groupName, reasonText);
             var applicant = group.getUser();

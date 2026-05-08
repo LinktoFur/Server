@@ -26,7 +26,7 @@ public class SessionManager {
     public UUID createSession(UUID userId) {
         var sessionId = UUID.randomUUID();
         sessions.put(sessionId, new Session(userId, System.currentTimeMillis() + duration.toMillis()));
-        PersistenceManager.INSTANCE.save();
+        PersistenceManager.INSTANCE.markDirty();
         return sessionId;
     }
 
@@ -35,7 +35,7 @@ public class SessionManager {
         if (session == null) return null;
         if (System.currentTimeMillis() > session.expireAt) {
             sessions.remove(sessionId);
-            PersistenceManager.INSTANCE.save();
+            PersistenceManager.INSTANCE.markDirty();
             return null;
         }
         return session.userId;
@@ -43,6 +43,6 @@ public class SessionManager {
 
     public void removeSession(UUID sessionId) {
         sessions.remove(sessionId);
-        PersistenceManager.INSTANCE.save();
+        PersistenceManager.INSTANCE.markDirty();
     }
 }

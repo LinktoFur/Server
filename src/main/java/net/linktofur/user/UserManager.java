@@ -19,11 +19,8 @@ public class UserManager {
     }
 
     public void addUser(User user) {
-        if (users.isEmpty()) {
-            user.level = UserType.ADMIN;
-        }
         users.put(user.id, user);
-        PersistenceManager.INSTANCE.save();
+        PersistenceManager.INSTANCE.markDirty();
     }
 
     public User getUserByEmail(String email) {
@@ -36,6 +33,6 @@ public class UserManager {
 
     public void removeUser(User user) {
         users.remove(user.id);
-        PersistenceManager.INSTANCE.save();
+        PersistenceManager.INSTANCE.markDirty();
     }
 }

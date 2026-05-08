@@ -28,7 +28,7 @@ public class GroupManager {
     public void addGroup(Group group) {
         group.id = nextId.getAndIncrement();
         groups.put(group.id, group);
-        PersistenceManager.INSTANCE.save();
+        PersistenceManager.INSTANCE.markDirty();
     }
 
     public Group getGroupById(Integer id) {
@@ -49,6 +49,6 @@ public class GroupManager {
 
     public void removeGroup(Integer id) {
         groups.remove(id);
-        PersistenceManager.INSTANCE.save();
+        PersistenceManager.INSTANCE.markDirty();
     }
 }

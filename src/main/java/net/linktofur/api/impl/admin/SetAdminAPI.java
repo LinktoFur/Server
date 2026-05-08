@@ -62,7 +62,7 @@ public class SetAdminAPI extends API {
         }
 
         targetUser.level = UserType.ADMIN;
-        PersistenceManager.INSTANCE.save();
+        PersistenceManager.INSTANCE.markDirty();
 
         log.info("User {} promoted to admin by {}", targetUser.name, user.name);
 
