@@ -61,17 +61,17 @@ public class Main {
             app = Javalin.create(cfg -> {
                 cfg.http.maxRequestSize = 1_000_000L; // 1MB
 
-                cfg.routes.before(ctx -> {
-                    ctx.header("Access-Control-Allow-Origin", "*");
-                    ctx.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-                    ctx.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+                cfg.bundledPlugins.enableCors(cors -> cors.addRule(rule -> {
+                    rule.anyHost();
+                    rule.exposeHeader("Authorization");
+                }));
 
+                cfg.routes.before(ctx -> {
                     ctx.header("X-Content-Type-Options", "nosniff");
                     ctx.header("X-Frame-Options", "DENY");
                     ctx.header("Referrer-Policy", "no-referrer");
                     ctx.header("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
                 });
-                cfg.routes.options("/*", ctx -> ctx.status(204));
 
                 for (API api : APIManager.INSTANCE.apis) {
                     Handler handler = ctx -> {
