@@ -13,11 +13,8 @@ import net.linktofur.user.UserType;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author LangYa466
@@ -29,7 +26,6 @@ public class Main {
     public static final String url = "https://www.linktofur.net/";
     private static final File config = new File("config.toml");
     public static final Map<String, String> configs = new HashMap<>();
-    public static Set<String> allowedOrigins = Set.of();
 
     static {
         log.info("Starting application...");
@@ -51,11 +47,6 @@ public class Main {
             log.error("Failed to read config", e);
             System.exit(-1);
         }
-
-        var origins = configs.getOrDefault("allowedOrigins", "");
-        allowedOrigins = origins.isBlank()
-                ? Set.of()
-                : new HashSet<>(Arrays.asList(origins.split("\\s*,\\s*")));
     }
 
     public static void main(String[] args) {
@@ -71,12 +62,7 @@ public class Main {
                 cfg.http.maxRequestSize = 1_000_000L; // 1MB
 
                 cfg.routes.before(ctx -> {
-                    var origin = ctx.header("Origin");
-                    if (origin != null && allowedOrigins.contains(origin)) {
-                        ctx.header("Access-Control-Allow-Origin", origin);
-                        ctx.header("Vary", "Origin");
-                        ctx.header("Access-Control-Allow-Credentials", "true");
-                    }
+                    ctx.header("Access-Control-Allow-Origin", "*");
                     ctx.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
                     ctx.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
@@ -90,14 +76,6 @@ public class Main {
                 for (API api : APIManager.INSTANCE.apis) {
                     Handler handler = ctx -> {
                         try {
-                            // 写操作:Origin 必须命中白名单 否则当 CSRF 拒绝
-                            if (!api.readOnly) {
-                                var origin = ctx.header("Origin");
-                                if (origin == null || !allowedOrigins.contains(origin)) {
-                                    ctx.status(403).json(Response.error(403, Map.of("message", "来源不允许")));
-                                    return;
-                                }
-                            }
                             Response response = api.run(ctx);
                             ctx.status(response.code).json(response);
                         } catch (Exception e) {
@@ -115,7 +93,7 @@ public class Main {
                 log.info("All APIs have been registered.");
             }).start(bindHost, port);
 
-            log.info("Listening on {}:{} (allowedOrigins={})", bindHost, port, allowedOrigins);
+            log.info("Listening on {}:{}", bindHost, port);
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 log.info("Shutting down... stopping server first to drain in-flight requests");
